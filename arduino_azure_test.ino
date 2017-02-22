@@ -18,17 +18,17 @@ void mqtt_reconnect()
   	{
   	  	Serial.print("Attempting MQTT connection...");
   	  	// Attempt to connect
-  	  	if (mqtt_client.connect(network_config.id, network_config.user, network_config.pass))
+  	  	if (mqtt_client.connect(id, user, pass))
   	  	{
   	    	Serial.println("connected to MQTT as:");
-  	    	Serial.println(network_config.id);
-  	    	Serial.println(network_config.user);
+  	    	Serial.println(id);
+  	    	Serial.println(user);
   	    	Serial.println(" ");
 
     		// Once connected, publish an announcement...
-    		mqtt_client.publish(network_config.pub_id, "initialized MQTT connection");
+    		mqtt_client.publish(pub_id, "initialized MQTT connection");
     		// ... and resubscribe
-    		mqtt_client.subscribe(network_config.sub_id, 1);                                   //subscribe to topic "config.SubID" @ QoS 1 "at least once"
+    		mqtt_client.subscribe(sub_id, 1);                                   //subscribe to topic "config.SubID" @ QoS 1 "at least once"
     	}
     	else
     	{
@@ -49,8 +49,8 @@ void setup() {
   	delay(100);
 
   	Serial.print("Attempting to connect to SSID: ");
-  	Serial.println(network_config.wifi_ssid);
-  	WiFi.begin(network_config.wifi_ssid, network_config.wifi_pass);
+  	Serial.println(wifi_ssid);
+  	WiFi.begin(wifi_ssid, wifi_pass);
 
   	// attempt to connect to Wifi network:
   	while (WiFi.status() != WL_CONNECTED) {
@@ -60,9 +60,9 @@ void setup() {
   	}
 
   	Serial.print("Connected to ");
-  	Serial.println(network_config.wifi_ssid);
+  	Serial.println(wifi_ssid);
 
-  	mqtt_client.setServer( network_config.mqtt_server, network_config.port );
+  	mqtt_client.setServer( mqtt_server, port );
 }
 
 
@@ -78,7 +78,7 @@ void loop()
   	memset( buf, 0, sizeof( buf ) );
 
   	sprintf(buf, message);
-  	bool res = mqtt_client.publish( buf, network_config.pub_id );
+  	bool res = mqtt_client.publish( pub_id, buf );
   	if( res )
   	{
   		printf( "publish successful: i am a message\n" );
